@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="button_add">Add</string>
+    <string name="note">Note</string>
+    <string name="note_saved">Note saved</string>
+    <string name="note_empty">Type a note</string>
+    <string name="clear_all_option">Clear all</string>
+    <string name="about_option">About</string>
+    <string name="credits_option">Credits</string>
+    <string name="erase_title">Confirm purge</string>
+    <string name="erase_confirm">Are you sure you want to erase all notes?</string>
+    <string name="button_erase">Erase</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="about_title">About this app</string>
+    <string name="about_message">Created by Marco Túlio Todeschini Coelho. This app was made to
+        showcase my skills as Android software developer. The source code for this app is
+        available at my github account under CC BY-NC. Visit my online portfolio for more info.</string>
+    <string name="button_notnow">Not now</string>
+    <string name="button_visit">Visit</string>
+    <string name="portfolio_url">http://monolitonegro.wixsite.com/portfolio</string>
+    <string name="no_browser_available">No browser available</string>
+    <string name="credits_title">Credits</string>
+    <string name="credits_message">App icon made by Oliver from flaticon under Creative Commons 3.0 BY.</string>
+    <string name="credits_url">http://www.flaticon.com/authors/madebyoliver</string>
+</resources>

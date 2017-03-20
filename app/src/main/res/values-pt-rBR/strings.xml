@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ListaDeLembretes</string>
+    <string name="button_add">Adicionar</string>
+    <string name="note">Lembrete</string>
+    <string name="note_saved">Lembrete salvo</string>
+    <string name="note_empty">Digite um lembrete</string>
+    <string name="clear_all_option">Limpar tudo</string>
+    <string name="about_option">Sobre</string>
+    <string name="credits_option">Créditos</string>
+    <string name="erase_title">Confirme a limpeza</string>
+    <string name="erase_confirm">Tem certeza que deseja apagar tudo?</string>
+    <string name="button_erase">Apagar</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="about_title">Sobre este app</string>
+    <string name="about_message">Criado por Marco Túlio Todeschini Coelho. Este app foi feito para
+        demonstrar meu trabalho como desenvolvedor Android. O código fonte deste app está
+        disponível na minha conta github sob licença CC BY-NC. Visite o meu portfolio para
+        saber mais.</string>
+    <string name="button_notnow">Agora não</string>
+    <string name="button_visit">Visitar</string>
+    <string name="portfolio_url">http://monolitonegro.wixsite.com/portfolio</string>
+    <string name="no_browser_available">Sem navegador instalado</string>
+    <string name="credits_title">Créditos</string>
+    <string name="credits_message">Ícone do app feito por Oliver do website flaticon sob licença Creative Commons 3.0 BY.</string>
+    <string name="credits_url">http://www.flaticon.com/authors/madebyoliver</string>
+</resources>

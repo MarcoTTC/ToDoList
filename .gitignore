@@ -1,0 +1,31 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+.externalNativeBuild
+
+#project screenshots, banner and promo images
+/captures
+/webimages
+
+#keystores
+/key
+*.jks
+
+#built application files
+*.apk
+*.ap_
+
+#Dalvik VM files
+*.dex
+
+#Java class files
+*.class
+
+#Generated files
+bin/
+gen/
+
