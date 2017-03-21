@@ -14,7 +14,7 @@
     <string name="about_title">Sobre este app</string>
     <string name="about_message">Criado por Marco Túlio Todeschini Coelho. Este app foi feito para
         demonstrar meu trabalho como desenvolvedor Android. O código fonte deste app está
-        disponível na minha conta github sob licença CC BY-NC. Visite o meu portfolio para
+        disponível na minha conta github sob licença GPLv3. Visite o meu portfolio para
         saber mais.</string>
     <string name="button_notnow">Agora não</string>
     <string name="button_visit">Visitar</string>
