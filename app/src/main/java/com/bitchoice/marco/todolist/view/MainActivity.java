@@ -46,10 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        note_editText = (EditText) findViewById(R.id.editText_id);
-        Button button_add = (Button) findViewById(R.id.button_add_id);
-        note_listView = (ListView) findViewById(R.id.listView_id);
-
         FragmentManager manager = getFragmentManager();
         mRetainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG);
         if(mRetainedFragment == null) {
@@ -60,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             reinitialize();
         }
+
+        note_editText = (EditText) findViewById(R.id.editText_id);
+        Button button_add = (Button) findViewById(R.id.button_add_id);
+        note_listView = (ListView) findViewById(R.id.listView_id);
 
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override

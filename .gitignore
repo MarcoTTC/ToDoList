@@ -19,6 +19,14 @@
 *.apk
 *.ap_
 
+#IntelliJ idea folder files
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/datasources.ids
+.idea/datasources.xml
+.idea/gradle.xml
+.idea/libraries/*.xml
+
 #Dalvik VM files
 *.dex
 
