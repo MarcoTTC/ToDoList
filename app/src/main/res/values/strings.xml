@@ -12,6 +12,7 @@
     <string name="button_erase">Erase</string>
     <string name="button_cancel">Cancel</string>
     <string name="about_title">About this app</string>
+    <string name="about_version">Version: </string>
     <string name="about_message">Created by Marco Túlio Todeschini Coelho. This app was made to
         showcase my skills as Android software developer. The source code for this app is
         available at my github account under GPLv3. Visit my online portfolio for more info.</string>

@@ -25,7 +25,8 @@
 .idea/datasources.ids
 .idea/datasources.xml
 .idea/gradle.xml
-.idea/libraries/*.xml
+.idea/libraries
+.idea/caches
 
 #Dalvik VM files
 *.dex

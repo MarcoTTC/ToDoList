@@ -3,6 +3,8 @@ package com.bitchoice.marco.todolist.view;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        note_editText = (EditText) findViewById(R.id.editText_id);
+        Button button_add = (Button) findViewById(R.id.button_add_id);
+        note_listView = (ListView) findViewById(R.id.listView_id);
+
         FragmentManager manager = getFragmentManager();
         mRetainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG);
         if(mRetainedFragment == null) {
@@ -56,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             reinitialize();
         }
-
-        note_editText = (EditText) findViewById(R.id.editText_id);
-        Button button_add = (Button) findViewById(R.id.button_add_id);
-        note_listView = (ListView) findViewById(R.id.listView_id);
 
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,10 +110,17 @@ public class MainActivity extends AppCompatActivity {
         });
         eraseDialog.create();
 
+        String aboutMessage;
+        try {
+            aboutMessage = getString(R.string.app_name) + "\n" + getString(R.string.about_version) + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "\n" + getString(R.string.about_message);
+        } catch(PackageManager.NameNotFoundException e) {
+            aboutMessage = getString(R.string.app_name) + "\n" + getString(R.string.about_message);
+        }
+
         aboutDialog = new AlertDialog.Builder(this);
         aboutDialog.setTitle(R.string.about_title);
         aboutDialog.setCancelable(true);
-        aboutDialog.setMessage(R.string.about_message);
+        aboutDialog.setMessage(aboutMessage);
         aboutDialog.setPositiveButton(R.string.button_visit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

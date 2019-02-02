@@ -12,6 +12,7 @@
     <string name="button_erase">Apagar</string>
     <string name="button_cancel">Cancelar</string>
     <string name="about_title">Sobre este app</string>
+    <string name="about_version">Versão: </string>
     <string name="about_message">Criado por Marco Túlio Todeschini Coelho. Este app foi feito para
         demonstrar meu trabalho como desenvolvedor Android. O código fonte deste app está
         disponível na minha conta github sob licença GPLv3. Visite o meu portfolio para
