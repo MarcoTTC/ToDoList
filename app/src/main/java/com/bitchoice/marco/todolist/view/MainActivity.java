@@ -3,7 +3,6 @@ package com.bitchoice.marco.todolist.view;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
@@ -13,12 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bitchoice.marco.todolist.R;
+import com.bitchoice.marco.todolist.databinding.ActivityMainBinding;
 import com.bitchoice.marco.todolist.presenter.RetainedFragment;
 import com.bitchoice.marco.todolist.presenter.ToDoListAdapter;
 
@@ -31,8 +28,7 @@ import com.bitchoice.marco.todolist.presenter.ToDoListAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText note_editText;
-    private ListView note_listView;
+    private ActivityMainBinding binding;
 
     private AlertDialog.Builder eraseDialog;
     private AlertDialog.Builder aboutDialog;
@@ -46,11 +42,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        note_editText = (EditText) findViewById(R.id.editText_id);
-        Button button_add = (Button) findViewById(R.id.button_add_id);
-        note_listView = (ListView) findViewById(R.id.listView_id);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         FragmentManager manager = getFragmentManager();
         mRetainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG);
@@ -63,16 +57,16 @@ public class MainActivity extends AppCompatActivity {
             reinitialize();
         }
 
-        button_add.setOnClickListener(new View.OnClickListener() {
+        binding.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String typedText = note_editText.getText().toString();
+                String typedText = binding.addInput.getText().toString();
 
                 if(!typedText.isEmpty()) {
                     if(toDoListAdapter.save(typedText)) {
                         String messageSaved = getString(R.string.note_saved);
                         Toast.makeText(MainActivity.this, messageSaved, Toast.LENGTH_SHORT).show();
-                        note_editText.setText("");
+                        binding.addInput.setText("");
                     }
                 } else {
                     String messageEmpty = getString(R.string.note_empty);
@@ -81,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        note_listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        binding.listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 toDoListAdapter.delete(position);
@@ -89,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        note_listView.setLongClickable(true);
+        binding.listView.setLongClickable(true);
 
         eraseDialog = new AlertDialog.Builder(this);
         eraseDialog.setTitle(R.string.erase_title);
@@ -174,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         toDoListAdapter = new ToDoListAdapter(this);
         mRetainedFragment.put(ToDoListAdapter.NAME, toDoListAdapter);
 
-        note_listView.setAdapter(toDoListAdapter);
+        binding.listView.setAdapter(toDoListAdapter);
     }
 
     private void reinitialize() {
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
             initialize();
         } else {
             toDoListAdapter.onConfigurationChange(this);
-            note_listView.setAdapter(toDoListAdapter);
+            binding.listView.setAdapter(toDoListAdapter);
         }
     }
 
