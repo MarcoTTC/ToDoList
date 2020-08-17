@@ -5,14 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitchoice.marco.todolist.R;
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentManager manager = getFragmentManager();
         mRetainedFragment = (RetainedFragment) manager.findFragmentByTag(TAG);
-        if(mRetainedFragment == null) {
+        if (mRetainedFragment == null) {
             mRetainedFragment = new RetainedFragment();
             manager.beginTransaction().add(mRetainedFragment, TAG).commit();
 
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String typedText = binding.addInput.getText().toString();
 
-                if(!typedText.isEmpty()) {
-                    if(toDoListAdapter.save(typedText)) {
+                if (!typedText.isEmpty()) {
+                    if (toDoListAdapter.save(typedText)) {
                         String messageSaved = getString(R.string.note_saved);
                         Toast.makeText(MainActivity.this, messageSaved, Toast.LENGTH_SHORT).show();
                         binding.addInput.setText("");
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         String aboutMessage;
         try {
             aboutMessage = getString(R.string.app_name) + "\n" + getString(R.string.about_version) + getPackageManager().getPackageInfo(getPackageName(), 0).versionName + "\n" + getString(R.string.about_message);
-        } catch(PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException e) {
             aboutMessage = getString(R.string.app_name) + "\n" + getString(R.string.about_message);
         }
 
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 String portfolio_url = getString(R.string.portfolio_url);
                 Intent visitPortfolio = new Intent(Intent.ACTION_VIEW);
                 visitPortfolio.setData(Uri.parse(portfolio_url));
-                if(visitPortfolio.resolveActivity(getPackageManager()) != null) {
+                if (visitPortfolio.resolveActivity(getPackageManager()) != null) {
                     startActivity(visitPortfolio);
                 } else {
                     Toast.makeText(MainActivity.this, R.string.no_browser_available, Toast.LENGTH_SHORT).show();
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 String credits_url = getString(R.string.credits_url);
                 Intent visitCredits = new Intent(Intent.ACTION_VIEW);
                 visitCredits.setData(Uri.parse(credits_url));
-                if(visitCredits.resolveActivity(getPackageManager()) != null) {
+                if (visitCredits.resolveActivity(getPackageManager()) != null) {
                     startActivity(visitCredits);
                 } else {
                     Toast.makeText(MainActivity.this, R.string.no_browser_available, Toast.LENGTH_SHORT).show();
@@ -209,10 +210,10 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.clear_option) {
             eraseDialog.show();
             return true;
-        } else if(id == R.id.about_option) {
+        } else if (id == R.id.about_option) {
             aboutDialog.show();
             return true;
-        } else if(id == R.id.credits_option) {
+        } else if (id == R.id.credits_option) {
             creditsDialog.show();
             return true;
         }
