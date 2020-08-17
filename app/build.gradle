@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion versions.compileSdk
@@ -30,10 +31,18 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation "androidx.appcompat:appcompat:${versions.support}"
+    // AndroidX
+    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
 
     // Material Design Library
     implementation "com.google.android.material:material:${versions.material}"
 
+    // Kotlin
+    implementation "androidx.core:core-ktx:${versions.ktx_core}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin_version}"
+
     testImplementation 'junit:junit:4.12'
+}
+repositories {
+    mavenCentral()
 }
