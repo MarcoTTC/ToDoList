@@ -10,8 +10,11 @@ import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
+import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.presenter.RetainedFragment
 import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
 
@@ -29,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     private var creditsDialog: AlertDialog.Builder? = null
     private var toDoListAdapter: ToDoListAdapter? = null
     private var mRetainedFragment: RetainedFragment? = null
+
+    private lateinit var database: ToDoListDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +53,11 @@ class MainActivity : AppCompatActivity() {
 
         binding!!.addBtn.setOnClickListener {
             val typedText = binding!!.addInput.text.toString()
-            if (!typedText.isEmpty()) {
-                if (toDoListAdapter!!.save(typedText)) {
-                    val messageSaved = getString(R.string.note_saved)
-                    Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
-                    binding!!.addInput.setText("")
-                }
+            if (typedText.isNotEmpty()) {
+                toDoListAdapter!!.save(typedText)
+                val messageSaved = getString(R.string.note_saved)
+                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
+                binding!!.addInput.setText("")
             } else {
                 val messageEmpty = getString(R.string.note_empty)
                 Toast.makeText(this@MainActivity, messageEmpty, Toast.LENGTH_SHORT).show()
@@ -134,7 +138,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        toDoListAdapter = ToDoListAdapter(this)
+        database = Room.databaseBuilder(
+                applicationContext,
+                ToDoListDatabase::class.java,
+          "ToDoList-Database"
+        ).build()
+
+        toDoListAdapter = ToDoListAdapter(this, database)
         mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoListAdapter!!)
         binding!!.listView.adapter = toDoListAdapter
     }
@@ -154,9 +164,9 @@ class MainActivity : AppCompatActivity() {
         toDoListAdapter!!.onConfigurationChange(this)
     }
 
-    override fun onStop() {
-        super.onStop()
-        toDoListAdapter!!.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
+        database.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

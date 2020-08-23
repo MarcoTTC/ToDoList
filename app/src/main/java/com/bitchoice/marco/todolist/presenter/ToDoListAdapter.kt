@@ -2,6 +2,7 @@ package com.bitchoice.marco.todolist.presenter
 
 import android.app.Activity
 import android.graphics.Color
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,9 @@ import android.widget.BaseAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bitchoice.marco.todolist.R
-import com.bitchoice.marco.todolist.model.TableDAO
-import com.bitchoice.marco.todolist.model.ToDoList
+import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
+import com.bitchoice.marco.todolist.model.room.ToDoTask
+import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
 import java.lang.ref.WeakReference
 
 /**
@@ -19,84 +21,107 @@ import java.lang.ref.WeakReference
  * and it's available at http://github.com/MarcoTTC/ToDoList
  * Visit my portfolio for more info at http://monolitonegro.wixsite.com/portfolio
  */
-class ToDoListAdapter(activity: Activity) : BaseAdapter() {
+class ToDoListAdapter(activity: Activity, database: ToDoListDatabase) : BaseAdapter() {
 
-    private var list: ToDoList? = null
     var activityReference: WeakReference<Activity>? = null
         private set
-    private var table: TableDAO? = null
+
+    private var dao: ToDoTaskDao = database.getToDoTaskDao()
+    private var list: MutableList<ToDoTask>? = null
+
+    init {
+        object : AsyncTask<Unit, Unit, Unit>() {
+            override fun doInBackground(vararg params: Unit?) {
+                list = dao.getAll() as MutableList<ToDoTask>
+            }
+        }.execute()
+
+        onConfigurationChange(activity)
+    }
 
     fun onConfigurationChange(activity: Activity) {
         activityReference = WeakReference(activity)
-        table = TableDAO()
-        ListLoadingAsyncTask(this).execute(table)
     }
 
-    fun onStop() {
-        if (table != null) {
-            table!!.closeDatabase()
-            table = null
-            list = null
-        }
-    }
-
-    fun setToDoList(toDoList: ToDoList?) {
+    fun setToDoList(toDoList: MutableList<ToDoTask>) {
         list = toDoList
     }
 
-    fun save(value: String): Boolean {
-        return if (list != null && table!!.saveNote(value)) {
-            val noteId = table!!.recoverIdFromNote(value)
-            list!!.add(noteId, value)
-            notifyDataSetChanged()
-            true
-        } else {
-            false
+    fun save(value: String) {
+        if (list != null) {
+            val newToDoTask = ToDoTask(0, value)
+
+            object : AsyncTask<Unit, Unit, Unit>() {
+                override fun doInBackground(vararg params: Unit?) {
+                    dao.insertAll(newToDoTask)
+                    val correctUid = dao.getUidFromNote(value)
+                    newToDoTask.uid = correctUid
+                    list!!.add(0, newToDoTask)
+                }
+
+                override fun onPostExecute(result: Unit?) {
+                    super.onPostExecute(result)
+
+                    notifyDataSetChanged()
+                }
+            }.execute()
         }
     }
 
     fun delete(pos: Int) {
         if (list != null) {
-            val removeId = list!!.getId(pos)
-            table!!.removeNote(removeId)
-            list!!.remove(pos)
-            notifyDataSetChanged()
+            val task = list!![pos]
+            object : AsyncTask<Unit, Unit, Unit>() {
+                override fun doInBackground(vararg params: Unit?) {
+                    dao.delete(task)
+                    list!!.removeAt(pos)
+                }
+
+                override fun onPostExecute(result: Unit?) {
+                    super.onPostExecute(result)
+
+                    notifyDataSetChanged()
+                }
+            }.execute()
         }
     }
 
     fun clear() {
-        table!!.clearTable()
-        list!!.clear()
-        notifyDataSetChanged()
+        if (list != null) {
+            object : AsyncTask<Unit, Unit, Unit>() {
+                override fun doInBackground(vararg params: Unit?) {
+                    dao.clear()
+                    list!!.clear()
+                }
+
+                override fun onPostExecute(result: Unit?) {
+                    super.onPostExecute(result)
+
+                    notifyDataSetChanged()
+                }
+            }.execute()
+        }
     }
 
     override fun getCount(): Int {
-        return if (list != null) {
-            list!!.size()
-        } else {
+        return if (list == null) {
             0
+        } else {
+            list!!.size
         }
     }
 
     override fun getItem(position: Int): Any? {
-        return if (list != null) {
-            list!!.getNote(position)
-        } else {
-            null
-        }
+        return list!![position]
     }
 
     override fun getItemId(position: Int): Long {
-        return if (list != null) {
-            list!!.getId(position).toLong()
-        } else {
-            0
-        }
+        return list!![position].uid.toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val idValue = list!!.getId(position)
-        val textValue = list!!.getNote(position)
+        val idValue = list!![position].uid
+        val textValue = list!![position].note
         val note = activityReference!!.get()!!.getString(R.string.note)
         val viewLayout: RelativeLayout
         viewLayout = if (convertView == null) {
@@ -118,9 +143,5 @@ class ToDoListAdapter(activity: Activity) : BaseAdapter() {
 
     companion object {
         const val NAME = "ToDoListAdapter"
-    }
-
-    init {
-        onConfigurationChange(activity)
     }
 }
