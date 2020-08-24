@@ -4,9 +4,9 @@ import android.os.AsyncTask
 import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
-import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
+import com.bitchoice.marco.todolist.presenter.ToDoTaskListAccess
 
-class ToDoTaskManager(database: ToDoListDatabase, val adapter: ToDoListAdapter) {
+class ToDoTaskManager(database: ToDoListDatabase, val listAccess: ToDoTaskListAccess) {
 
     private var dao: ToDoTaskDao = database.getToDoTaskDao()
 
@@ -19,7 +19,7 @@ class ToDoTaskManager(database: ToDoListDatabase, val adapter: ToDoListAdapter) 
             override fun onPostExecute(result: List<ToDoTask>) {
                 super.onPostExecute(result)
 
-                adapter.setToDoList(result)
+                listAccess.setToDoTaskList(result)
             }
         }.execute()
     }
@@ -39,22 +39,23 @@ class ToDoTaskManager(database: ToDoListDatabase, val adapter: ToDoListAdapter) 
             override fun onPostExecute(newToDoTask: ToDoTask) {
                 super.onPostExecute(newToDoTask)
 
-                adapter.addTask(newToDoTask)
+                listAccess.addTask(newToDoTask)
             }
         }.execute()
     }
 
     fun delete(pos: Int) {
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                val task = adapter.getItem(pos) as ToDoTask
+        object : AsyncTask<Unit, Unit, ToDoTask>() {
+            override fun doInBackground(vararg params: Unit?): ToDoTask {
+                val task = listAccess.getItem(pos) as ToDoTask
                 dao.delete(task)
+                return task
             }
 
-            override fun onPostExecute(result: Unit?) {
+            override fun onPostExecute(result: ToDoTask) {
                 super.onPostExecute(result)
 
-                adapter.removeTaskAt(pos)
+                listAccess.removeTask(result)
             }
         }.execute()
     }
@@ -68,7 +69,7 @@ class ToDoTaskManager(database: ToDoListDatabase, val adapter: ToDoListAdapter) 
             override fun onPostExecute(result: Unit?) {
                 super.onPostExecute(result)
 
-                adapter.clearList()
+                listAccess.clearList()
             }
         }.execute()
     }

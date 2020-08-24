@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference
  * and it's available at http://github.com/MarcoTTC/ToDoList
  * Visit my portfolio for more info at http://monolitonegro.wixsite.com/portfolio
  */
-class ToDoListAdapter(context: Context) : BaseAdapter() {
+class ToDoListAdapter(context: Context) : BaseAdapter(), ToDoTaskListAccess {
 
     private lateinit var contextReference: WeakReference<Context>
 
@@ -32,25 +32,25 @@ class ToDoListAdapter(context: Context) : BaseAdapter() {
         contextReference = WeakReference(context)
     }
 
-    fun setToDoList(toDoList: List<ToDoTask>) {
-        list = toDoList.toMutableList()
+    override fun setToDoTaskList(toDoTaskList: List<ToDoTask>) {
+        list = toDoTaskList.toMutableList()
     }
 
-    fun addTask(newTask: ToDoTask) {
+    override fun addTask(newTask: ToDoTask) {
         if (list != null) {
             list!!.add(0, newTask)
-            notifyDataSetChanged();
-        }
-    }
-
-    fun removeTaskAt(pos: Int) {
-        if (list != null) {
-            list!!.removeAt(pos)
             notifyDataSetChanged()
         }
     }
 
-    fun clearList() {
+    override fun removeTask(task: ToDoTask) {
+        if (list != null) {
+            list!!.remove(task)
+            notifyDataSetChanged()
+        }
+    }
+
+    override fun clearList() {
         if (list != null) {
             list!!.clear()
             notifyDataSetChanged()
