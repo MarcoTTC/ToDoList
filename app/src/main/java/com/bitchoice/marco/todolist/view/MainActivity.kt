@@ -186,15 +186,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear_option -> {
-                eraseDialog!!.show()
+                eraseDialog.show()
                 true
             }
             R.id.about_option -> {
-                aboutDialog!!.show()
+                aboutDialog.show()
                 true
             }
             R.id.credits_option -> {
-                creditsDialog!!.show()
+                creditsDialog.show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
