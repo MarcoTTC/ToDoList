@@ -8,16 +8,15 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
 import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.presenter.RetainedFragment
 import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Created by Marco Tulio Todeschini Coelho on 12/03/17
@@ -27,11 +26,13 @@ import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
  */
 class MainActivity : AppCompatActivity() {
 
-    private var binding: ActivityMainBinding? = null
-    private var eraseDialog: AlertDialog.Builder? = null
-    private var aboutDialog: AlertDialog.Builder? = null
-    private var creditsDialog: AlertDialog.Builder? = null
+    private lateinit var binding: ActivityMainBinding
+
     private var mRetainedFragment: RetainedFragment? = null
+
+    private lateinit var eraseDialog: MaterialAlertDialogBuilder
+    private lateinit var aboutDialog: MaterialAlertDialogBuilder
+    private lateinit var creditsDialog: MaterialAlertDialogBuilder
 
     private lateinit var database: ToDoListDatabase
     private lateinit var toDoListAdapter: ToDoListAdapter
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
 
         val manager = fragmentManager
         mRetainedFragment = manager.findFragmentByTag(TAG) as RetainedFragment?
@@ -55,38 +56,38 @@ class MainActivity : AppCompatActivity() {
 
         toDoTaskManager.recoverAllNotes()
 
-        binding!!.addBtn.setOnClickListener {
-            val typedText = binding!!.addInput.text.toString()
+        binding.addBtn.setOnClickListener {
+            val typedText = binding.addInput.text.toString()
             if (typedText.isNotEmpty()) {
                 toDoTaskManager.save(typedText)
                 val messageSaved = getString(R.string.note_saved)
                 Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
-                binding!!.addInput.setText("")
+                binding.addInput.setText("")
             } else {
                 val messageEmpty = getString(R.string.note_empty)
                 Toast.makeText(this@MainActivity, messageEmpty, Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding!!.listView.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
+        binding.listView.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
             toDoTaskManager.delete(position)
             true
         }
 
-        binding!!.listView.isLongClickable = true
-        eraseDialog = AlertDialog.Builder(this)
-        eraseDialog!!.setTitle(R.string.erase_title)
-        eraseDialog!!.setCancelable(true)
-        eraseDialog!!.setMessage(R.string.erase_confirm)
-        eraseDialog!!.setPositiveButton(R.string.button_erase) { dialog, _ ->
+        binding.listView.isLongClickable = true
+        eraseDialog = MaterialAlertDialogBuilder(this)
+        eraseDialog.setTitle(R.string.erase_title)
+        eraseDialog.setCancelable(true)
+        eraseDialog.setMessage(R.string.erase_confirm)
+        eraseDialog.setPositiveButton(R.string.button_erase) { dialog, _ ->
             toDoTaskManager.clear()
             dialog.dismiss()
         }
 
-        eraseDialog!!.setNegativeButton(R.string.button_cancel) { dialog, _ ->
+        eraseDialog.setNegativeButton(R.string.button_cancel) { dialog, _ ->
             dialog.cancel()
         }
-        eraseDialog!!.create()
+        eraseDialog.create()
         val aboutMessage: String = try {
             """
             ${getString(R.string.app_name)}
@@ -100,11 +101,11 @@ class MainActivity : AppCompatActivity() {
             """.trimIndent()
         }
 
-        aboutDialog = AlertDialog.Builder(this)
-        aboutDialog!!.setTitle(R.string.about_title)
-        aboutDialog!!.setCancelable(true)
-        aboutDialog!!.setMessage(aboutMessage)
-        aboutDialog!!.setPositiveButton(R.string.button_visit) { dialog, _ ->
+        aboutDialog = MaterialAlertDialogBuilder(this)
+        aboutDialog.setTitle(R.string.about_title)
+        aboutDialog.setCancelable(true)
+        aboutDialog.setMessage(aboutMessage)
+        aboutDialog.setPositiveButton(R.string.button_visit) { dialog, _ ->
             val portfolioUrl = getString(R.string.portfolio_url)
             val visitPortfolio = Intent(Intent.ACTION_VIEW)
             visitPortfolio.data = Uri.parse(portfolioUrl)
@@ -115,16 +116,16 @@ class MainActivity : AppCompatActivity() {
             }
             dialog.dismiss()
         }
-        aboutDialog!!.setNegativeButton(R.string.button_notnow) { dialog, _ ->
+        aboutDialog.setNegativeButton(R.string.button_notnow) { dialog, _ ->
             dialog.cancel()
         }
-        aboutDialog!!.create()
+        aboutDialog.create()
 
-        creditsDialog = AlertDialog.Builder(this)
-        creditsDialog!!.setTitle(R.string.credits_title)
-        creditsDialog!!.setCancelable(true)
-        creditsDialog!!.setMessage(R.string.credits_message)
-        creditsDialog!!.setPositiveButton(R.string.button_visit) { dialog, _ ->
+        creditsDialog = MaterialAlertDialogBuilder(this)
+        creditsDialog.setTitle(R.string.credits_title)
+        creditsDialog.setCancelable(true)
+        creditsDialog.setMessage(R.string.credits_message)
+        creditsDialog.setPositiveButton(R.string.button_visit) { dialog, _ ->
             val creditsUrl = getString(R.string.credits_url)
             val visitCredits = Intent(Intent.ACTION_VIEW)
             visitCredits.data = Uri.parse(creditsUrl)
@@ -135,17 +136,17 @@ class MainActivity : AppCompatActivity() {
             }
             dialog.dismiss()
         }
-        creditsDialog!!.setNegativeButton(R.string.button_notnow) { dialog, _ ->
+        creditsDialog.setNegativeButton(R.string.button_notnow) { dialog, _ ->
             dialog.cancel()
         }
-        creditsDialog!!.create()
+        creditsDialog.create()
     }
 
     private fun initialize() {
         database = Room.databaseBuilder(
                 applicationContext,
                 ToDoListDatabase::class.java,
-          "ToDoList-Database"
+                "ToDoList-Database"
         ).build()
 
         toDoListAdapter = ToDoListAdapter(this)
@@ -154,7 +155,7 @@ class MainActivity : AppCompatActivity() {
         mRetainedFragment!!.put("database", database)
         mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoListAdapter)
         mRetainedFragment!!.put("ToDoTaskManager", toDoTaskManager)
-        binding!!.listView.adapter = toDoListAdapter
+        binding.listView.adapter = toDoListAdapter
     }
 
     private fun reinitialize() {
@@ -163,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         toDoTaskManager = mRetainedFragment!![ToDoTaskManager.NAME]
 
         toDoListAdapter.onConfigurationChange(this)
-        binding!!.listView.adapter = toDoListAdapter
+        binding.listView.adapter = toDoListAdapter
     }
 
     override fun onRestart() {
