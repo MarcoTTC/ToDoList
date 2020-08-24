@@ -14,6 +14,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
+import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.presenter.RetainedFragment
 import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
@@ -30,10 +31,11 @@ class MainActivity : AppCompatActivity() {
     private var eraseDialog: AlertDialog.Builder? = null
     private var aboutDialog: AlertDialog.Builder? = null
     private var creditsDialog: AlertDialog.Builder? = null
-    private var toDoListAdapter: ToDoListAdapter? = null
     private var mRetainedFragment: RetainedFragment? = null
 
     private lateinit var database: ToDoListDatabase
+    private lateinit var toDoListAdapter: ToDoListAdapter
+    private lateinit var toDoTaskManager: ToDoTaskManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +53,12 @@ class MainActivity : AppCompatActivity() {
             reinitialize()
         }
 
+        toDoTaskManager.recoverAllNotes()
+
         binding!!.addBtn.setOnClickListener {
             val typedText = binding!!.addInput.text.toString()
             if (typedText.isNotEmpty()) {
-                toDoListAdapter!!.save(typedText)
+                toDoTaskManager.save(typedText)
                 val messageSaved = getString(R.string.note_saved)
                 Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
                 binding!!.addInput.setText("")
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding!!.listView.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
-            toDoListAdapter!!.delete(position)
+            toDoTaskManager.delete(position)
             true
         }
 
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         eraseDialog!!.setCancelable(true)
         eraseDialog!!.setMessage(R.string.erase_confirm)
         eraseDialog!!.setPositiveButton(R.string.button_erase) { dialog, _ ->
-            toDoListAdapter!!.clear()
+            toDoTaskManager.clear()
             dialog.dismiss()
         }
 
@@ -144,24 +148,27 @@ class MainActivity : AppCompatActivity() {
           "ToDoList-Database"
         ).build()
 
-        toDoListAdapter = ToDoListAdapter(this, database)
-        mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoListAdapter!!)
+        toDoListAdapter = ToDoListAdapter(this)
+        toDoTaskManager = ToDoTaskManager(database, toDoListAdapter)
+
+        mRetainedFragment!!.put("database", database)
+        mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoListAdapter)
+        mRetainedFragment!!.put("ToDoTaskManager", toDoTaskManager)
         binding!!.listView.adapter = toDoListAdapter
     }
 
     private fun reinitialize() {
-        toDoListAdapter = mRetainedFragment!!.get<ToDoListAdapter>(ToDoListAdapter.NAME)
-        if (toDoListAdapter == null) {
-            initialize()
-        } else {
-            toDoListAdapter!!.onConfigurationChange(this)
-            binding!!.listView.adapter = toDoListAdapter
-        }
+        database = mRetainedFragment!!["database"]
+        toDoListAdapter = mRetainedFragment!![ToDoListAdapter.NAME]
+        toDoTaskManager = mRetainedFragment!![ToDoTaskManager.NAME]
+
+        toDoListAdapter.onConfigurationChange(this)
+        binding!!.listView.adapter = toDoListAdapter
     }
 
     override fun onRestart() {
         super.onRestart()
-        toDoListAdapter!!.onConfigurationChange(this)
+        toDoListAdapter.onConfigurationChange(this)
     }
 
     override fun onDestroy() {

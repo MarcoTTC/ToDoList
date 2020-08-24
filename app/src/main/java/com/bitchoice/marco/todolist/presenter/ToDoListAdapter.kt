@@ -1,8 +1,7 @@
 package com.bitchoice.marco.todolist.presenter
 
-import android.app.Activity
+import android.content.Context
 import android.graphics.Color
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,7 @@ import android.widget.BaseAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bitchoice.marco.todolist.R
-import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
 import java.lang.ref.WeakReference
 
 /**
@@ -21,85 +18,42 @@ import java.lang.ref.WeakReference
  * and it's available at http://github.com/MarcoTTC/ToDoList
  * Visit my portfolio for more info at http://monolitonegro.wixsite.com/portfolio
  */
-class ToDoListAdapter(activity: Activity, database: ToDoListDatabase) : BaseAdapter() {
+class ToDoListAdapter(context: Context) : BaseAdapter() {
 
-    var activityReference: WeakReference<Activity>? = null
-        private set
+    private lateinit var contextReference: WeakReference<Context>
 
-    private var dao: ToDoTaskDao = database.getToDoTaskDao()
     private var list: MutableList<ToDoTask>? = null
 
     init {
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                list = dao.getAll() as MutableList<ToDoTask>
-            }
-        }.execute()
-
-        onConfigurationChange(activity)
+        onConfigurationChange(context)
     }
 
-    fun onConfigurationChange(activity: Activity) {
-        activityReference = WeakReference(activity)
+    fun onConfigurationChange(context: Context) {
+        contextReference = WeakReference(context)
     }
 
-    fun setToDoList(toDoList: MutableList<ToDoTask>) {
-        list = toDoList
+    fun setToDoList(toDoList: List<ToDoTask>) {
+        list = toDoList.toMutableList()
     }
 
-    fun save(value: String) {
+    fun addTask(newTask: ToDoTask) {
         if (list != null) {
-            val newToDoTask = ToDoTask(0, value)
-
-            object : AsyncTask<Unit, Unit, Unit>() {
-                override fun doInBackground(vararg params: Unit?) {
-                    dao.insertAll(newToDoTask)
-                    val correctUid = dao.getUidFromNote(value)
-                    newToDoTask.uid = correctUid
-                    list!!.add(0, newToDoTask)
-                }
-
-                override fun onPostExecute(result: Unit?) {
-                    super.onPostExecute(result)
-
-                    notifyDataSetChanged()
-                }
-            }.execute()
+            list!!.add(0, newTask)
+            notifyDataSetChanged();
         }
     }
 
-    fun delete(pos: Int) {
+    fun removeTaskAt(pos: Int) {
         if (list != null) {
-            val task = list!![pos]
-            object : AsyncTask<Unit, Unit, Unit>() {
-                override fun doInBackground(vararg params: Unit?) {
-                    dao.delete(task)
-                    list!!.removeAt(pos)
-                }
-
-                override fun onPostExecute(result: Unit?) {
-                    super.onPostExecute(result)
-
-                    notifyDataSetChanged()
-                }
-            }.execute()
+            list!!.removeAt(pos)
+            notifyDataSetChanged()
         }
     }
 
-    fun clear() {
+    fun clearList() {
         if (list != null) {
-            object : AsyncTask<Unit, Unit, Unit>() {
-                override fun doInBackground(vararg params: Unit?) {
-                    dao.clear()
-                    list!!.clear()
-                }
-
-                override fun onPostExecute(result: Unit?) {
-                    super.onPostExecute(result)
-
-                    notifyDataSetChanged()
-                }
-            }.execute()
+            list!!.clear()
+            notifyDataSetChanged()
         }
     }
 
@@ -122,10 +76,10 @@ class ToDoListAdapter(activity: Activity, database: ToDoListDatabase) : BaseAdap
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val idValue = list!![position].uid
         val textValue = list!![position].note
-        val note = activityReference!!.get()!!.getString(R.string.note)
+        val note = contextReference.get()?.resources?.getString(R.string.note)
         val viewLayout: RelativeLayout
         viewLayout = if (convertView == null) {
-            val thisLayoutInflater = LayoutInflater.from(activityReference!!.get()!!.applicationContext)
+            val thisLayoutInflater = LayoutInflater.from(contextReference.get())
             thisLayoutInflater.inflate(android.R.layout.simple_list_item_2, parent, false) as RelativeLayout
         } else {
             convertView as RelativeLayout

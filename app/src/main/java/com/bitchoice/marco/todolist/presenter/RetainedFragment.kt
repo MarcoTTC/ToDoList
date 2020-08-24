@@ -24,7 +24,7 @@ class RetainedFragment : Fragment() {
         mData[key] = `object`
     }
 
-    operator fun <T> get(key: String?): T? {
-        return mData[key] as T?
+    operator fun <T> get(key: String?): T {
+        return mData[key] as T
     }
 }
