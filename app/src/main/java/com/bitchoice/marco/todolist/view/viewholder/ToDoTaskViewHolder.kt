@@ -1,19 +1,18 @@
 package com.bitchoice.marco.todolist.view.viewholder
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ToDoTaskViewHolderBinding
 import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.presenter.ToDoTaskListAccess
+import com.bitchoice.marco.todolist.presenter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
 
 class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding, private val application: ToDoListApplication) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(task: ToDoTask, listAccess: ToDoTaskListAccess) {
+    fun bind(task: ToDoTask, listAccess: ListAccess<ToDoTask>) {
         val taskTitle = String.format(binding.root.resources.getString(R.string.note), task.uid)
 
         binding.taskTitle.text = taskTitle

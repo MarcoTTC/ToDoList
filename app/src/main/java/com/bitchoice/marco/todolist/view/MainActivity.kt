@@ -8,14 +8,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
 import com.bitchoice.marco.todolist.model.ToDoTaskManager
-import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.presenter.RetainedFragment
-import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
-import com.bitchoice.marco.todolist.view.adapter.ToDoTaskListAdapter
+import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
@@ -36,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var aboutDialog: MaterialAlertDialogBuilder
     private lateinit var creditsDialog: MaterialAlertDialogBuilder
 
-    private lateinit var toDoTaskListAdapter: ToDoTaskListAdapter
+    private lateinit var toDoTaskListAdapter: ToDoListAdapter
     private lateinit var toDoTaskManager: ToDoTaskManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        toDoTaskListAdapter = ToDoTaskListAdapter(application)
+        toDoTaskListAdapter = ToDoListAdapter(application)
         toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
 
         mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoTaskListAdapter)

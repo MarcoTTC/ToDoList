@@ -3,11 +3,11 @@ package com.bitchoice.marco.todolist.view.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.presenter.ToDoTaskListAccess
+import com.bitchoice.marco.todolist.presenter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
 import com.bitchoice.marco.todolist.view.viewholder.ToDoTaskViewHolder
 
-class ToDoTaskListAdapter(private val application: ToDoListApplication): RecyclerView.Adapter<ToDoTaskViewHolder>(), ToDoTaskListAccess {
+class ToDoListAdapter(private val application: ToDoListApplication): RecyclerView.Adapter<ToDoTaskViewHolder>(), ListAccess<ToDoTask> {
 
     private var toDoList: MutableList<ToDoTask>? = null
 
@@ -28,19 +28,19 @@ class ToDoTaskListAdapter(private val application: ToDoListApplication): Recycle
         }
     }
 
-    override fun setToDoTaskList(toDoTaskList: List<ToDoTask>) {
+    override fun setList(toDoTaskList: List<ToDoTask>) {
         toDoList = toDoTaskList.toMutableList()
         notifyDataSetChanged()
     }
 
-    override fun addTask(newTask: ToDoTask) {
+    override fun addToList(newTask: ToDoTask) {
         if (toDoList != null) {
             toDoList!!.add(0, newTask)
             notifyDataSetChanged()
         }
     }
 
-    override fun removeTask(task: ToDoTask) {
+    override fun removeFromList(task: ToDoTask) {
         if (toDoList != null) {
             toDoList!!.remove(task)
             notifyDataSetChanged()
@@ -52,5 +52,9 @@ class ToDoTaskListAdapter(private val application: ToDoListApplication): Recycle
             toDoList!!.clear()
             notifyDataSetChanged()
         }
+    }
+
+    companion object {
+        val NAME: String = ToDoListAdapter::class.simpleName!!
     }
 }

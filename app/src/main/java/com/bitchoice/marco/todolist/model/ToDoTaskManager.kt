@@ -1,13 +1,12 @@
 package com.bitchoice.marco.todolist.model
 
 import android.os.AsyncTask
-import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
-import com.bitchoice.marco.todolist.presenter.ToDoTaskListAccess
+import com.bitchoice.marco.todolist.presenter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
 
-class ToDoTaskManager(application: ToDoListApplication, val listAccess: ToDoTaskListAccess) {
+class ToDoTaskManager(application: ToDoListApplication, val listAccess: ListAccess<ToDoTask>) {
 
     private var dao: ToDoTaskDao = application.database.getToDoTaskDao()
 
@@ -20,7 +19,7 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ToDoTask
             override fun onPostExecute(result: List<ToDoTask>) {
                 super.onPostExecute(result)
 
-                listAccess.setToDoTaskList(result)
+                listAccess.setList(result)
             }
         }.execute()
     }
@@ -40,7 +39,7 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ToDoTask
             override fun onPostExecute(newToDoTask: ToDoTask) {
                 super.onPostExecute(newToDoTask)
 
-                listAccess.addTask(newToDoTask)
+                listAccess.addToList(newToDoTask)
             }
         }.execute()
     }
@@ -55,7 +54,7 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ToDoTask
             override fun onPostExecute(result: ToDoTask) {
                 super.onPostExecute(result)
 
-                listAccess.removeTask(result)
+                listAccess.removeFromList(result)
             }
         }.execute()
     }
