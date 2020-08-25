@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
 import com.bitchoice.marco.todolist.model.ToDoTaskManager
-import com.bitchoice.marco.todolist.presenter.RetainedFragment
 import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -26,8 +25,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var application: ToDoListApplication
 
     private lateinit var binding: ActivityMainBinding
-
-    private var mRetainedFragment: RetainedFragment? = null
 
     private lateinit var eraseDialog: MaterialAlertDialogBuilder
     private lateinit var aboutDialog: MaterialAlertDialogBuilder
@@ -44,15 +41,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val manager = fragmentManager
-        mRetainedFragment = manager.findFragmentByTag(TAG) as RetainedFragment?
-        if (mRetainedFragment == null) {
-            mRetainedFragment = RetainedFragment()
-            manager.beginTransaction().add(mRetainedFragment, TAG).commit()
-            initialize()
-        } else {
-            reinitialize()
-        }
+        toDoTaskListAdapter = ToDoListAdapter(application)
+        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
+
+        binding.recyclerView.adapter = toDoTaskListAdapter
 
         toDoTaskManager.recoverAllNotes()
 
@@ -137,22 +129,6 @@ class MainActivity : AppCompatActivity() {
         creditsDialog.create()
     }
 
-    private fun initialize() {
-        toDoTaskListAdapter = ToDoListAdapter(application)
-        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
-
-        mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoTaskListAdapter)
-        mRetainedFragment!!.put("ToDoTaskManager", toDoTaskManager)
-        binding.recyclerView.adapter = toDoTaskListAdapter
-    }
-
-    private fun reinitialize() {
-        toDoTaskListAdapter = mRetainedFragment!![ToDoListAdapter.NAME]
-        toDoTaskManager = mRetainedFragment!![ToDoTaskManager.NAME]
-
-        binding.recyclerView.adapter = toDoTaskListAdapter
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         application.database.close()
@@ -180,9 +156,5 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    companion object {
-        const val TAG = "MainActivity"
     }
 }
