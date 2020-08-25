@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AdapterView.OnItemLongClickListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
@@ -16,6 +15,7 @@ import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.presenter.RetainedFragment
 import com.bitchoice.marco.todolist.presenter.ToDoListAdapter
+import com.bitchoice.marco.todolist.view.adapter.ToDoTaskListAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
@@ -26,6 +26,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var application: ToDoListApplication
+
     private lateinit var binding: ActivityMainBinding
 
     private var mRetainedFragment: RetainedFragment? = null
@@ -34,12 +36,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var aboutDialog: MaterialAlertDialogBuilder
     private lateinit var creditsDialog: MaterialAlertDialogBuilder
 
-    private lateinit var database: ToDoListDatabase
-    private lateinit var toDoListAdapter: ToDoListAdapter
+    private lateinit var toDoTaskListAdapter: ToDoTaskListAdapter
     private lateinit var toDoTaskManager: ToDoTaskManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        application = getApplication() as ToDoListApplication
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -69,12 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.listView.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ ->
-            toDoTaskManager.delete(position)
-            true
-        }
-
-        binding.listView.isLongClickable = true
+        binding.recyclerView.isLongClickable = true
         eraseDialog = MaterialAlertDialogBuilder(this)
         eraseDialog.setTitle(R.string.erase_title)
         eraseDialog.setCancelable(true)
@@ -143,38 +141,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
-        database = Room.databaseBuilder(
-                applicationContext,
-                ToDoListDatabase::class.java,
-                "ToDoList-Database"
-        ).build()
+        toDoTaskListAdapter = ToDoTaskListAdapter(application)
+        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
 
-        toDoListAdapter = ToDoListAdapter(this)
-        toDoTaskManager = ToDoTaskManager(database, toDoListAdapter)
-
-        mRetainedFragment!!.put("database", database)
-        mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoListAdapter)
+        mRetainedFragment!!.put(ToDoListAdapter.NAME, toDoTaskListAdapter)
         mRetainedFragment!!.put("ToDoTaskManager", toDoTaskManager)
-        binding.listView.adapter = toDoListAdapter
+        binding.recyclerView.adapter = toDoTaskListAdapter
     }
 
     private fun reinitialize() {
-        database = mRetainedFragment!!["database"]
-        toDoListAdapter = mRetainedFragment!![ToDoListAdapter.NAME]
+        toDoTaskListAdapter = mRetainedFragment!![ToDoListAdapter.NAME]
         toDoTaskManager = mRetainedFragment!![ToDoTaskManager.NAME]
 
-        toDoListAdapter.onConfigurationChange(this)
-        binding.listView.adapter = toDoListAdapter
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        toDoListAdapter.onConfigurationChange(this)
+        binding.recyclerView.adapter = toDoTaskListAdapter
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        database.close()
+        application.database.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

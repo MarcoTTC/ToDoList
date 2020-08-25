@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ListaDeLembretes</string>
     <string name="button_add">Adicionar</string>
-    <string name="note">Lembrete</string>
+    <string name="note" formatted="true">Lembrete %d</string>
     <string name="note_saved">Lembrete salvo</string>
     <string name="note_empty">Digite um lembrete</string>
     <string name="clear_all_option">Limpar tudo</string>

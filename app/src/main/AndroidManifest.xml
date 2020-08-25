@@ -3,6 +3,7 @@
     package="com.bitchoice.marco.todolist">
 
     <application
+        android:name=".view.ToDoListApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

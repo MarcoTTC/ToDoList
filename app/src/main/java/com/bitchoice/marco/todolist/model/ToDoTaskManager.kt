@@ -5,10 +5,11 @@ import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
 import com.bitchoice.marco.todolist.presenter.ToDoTaskListAccess
+import com.bitchoice.marco.todolist.view.ToDoListApplication
 
-class ToDoTaskManager(database: ToDoListDatabase, val listAccess: ToDoTaskListAccess) {
+class ToDoTaskManager(application: ToDoListApplication, val listAccess: ToDoTaskListAccess) {
 
-    private var dao: ToDoTaskDao = database.getToDoTaskDao()
+    private var dao: ToDoTaskDao = application.database.getToDoTaskDao()
 
     fun recoverAllNotes() {
         object : AsyncTask<Unit, Unit, List<ToDoTask>>() {
@@ -44,10 +45,9 @@ class ToDoTaskManager(database: ToDoListDatabase, val listAccess: ToDoTaskListAc
         }.execute()
     }
 
-    fun delete(pos: Int) {
+    fun delete(task: ToDoTask) {
         object : AsyncTask<Unit, Unit, ToDoTask>() {
             override fun doInBackground(vararg params: Unit?): ToDoTask {
-                val task = listAccess.getItem(pos) as ToDoTask
                 dao.delete(task)
                 return task
             }

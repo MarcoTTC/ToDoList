@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ToDoList</string>
     <string name="button_add">Add</string>
-    <string name="note">Note</string>
+    <string name="note" formatted="true">Note %d</string>
     <string name="note_saved">Note saved</string>
     <string name="note_empty">Type a note</string>
     <string name="clear_all_option">Clear all</string>

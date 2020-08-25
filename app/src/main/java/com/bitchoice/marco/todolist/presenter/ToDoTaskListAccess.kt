@@ -10,6 +10,4 @@ interface ToDoTaskListAccess {
     fun removeTask(task: ToDoTask)
 
     fun clearList()
-
-    fun getItem(position: Int): Any?
 }
