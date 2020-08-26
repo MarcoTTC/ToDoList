@@ -24,26 +24,6 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ListAcce
         }.execute()
     }
 
-    fun save(value: String) {
-        object : AsyncTask<Unit, Unit, ToDoTask>() {
-            override fun doInBackground(vararg params: Unit?): ToDoTask {
-                val newToDoTask = ToDoTask(0, value)
-
-                dao.insertAll(newToDoTask)
-                val correctUid = dao.getUidFromNote(value)
-                newToDoTask.uid = correctUid
-
-                return newToDoTask
-            }
-
-            override fun onPostExecute(newToDoTask: ToDoTask) {
-                super.onPostExecute(newToDoTask)
-
-                listAccess.addToList(newToDoTask)
-            }
-        }.execute()
-    }
-
     fun delete(task: ToDoTask) {
         object : AsyncTask<Unit, Unit, ToDoTask>() {
             override fun doInBackground(vararg params: Unit?): ToDoTask {

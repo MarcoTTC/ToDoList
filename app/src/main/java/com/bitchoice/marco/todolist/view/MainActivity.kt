@@ -48,6 +48,24 @@ class MainActivity : AppCompatActivity() {
         val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
         toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
 
+        toDoListViewModel.noteToAdd.observe(this, { task ->
+            if (task != null) {
+                toDoTaskListAdapter.addToList(task)
+
+                val messageSaved = getString(R.string.note_saved)
+                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
+
+                binding.addInput.setText("")
+            }
+        })
+
+        toDoListViewModel.failedToSaveNote.observe(this, { success ->
+            if (success) {
+                val messageSaved = getString(R.string.note_empty)
+                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
+            }
+        })
+
         binding.viewModel = toDoListViewModel
 
         toDoTaskListAdapter = ToDoListAdapter(application)
@@ -58,16 +76,7 @@ class MainActivity : AppCompatActivity() {
         toDoTaskManager.recoverAllNotes()
 
         binding.addBtn.setOnClickListener {
-            val typedText = binding.addInput.text.toString()
-            if (typedText.isNotEmpty()) {
-                toDoTaskManager.save(typedText)
-                val messageSaved = getString(R.string.note_saved)
-                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
-                binding.addInput.setText("")
-            } else {
-                val messageEmpty = getString(R.string.note_empty)
-                Toast.makeText(this@MainActivity, messageEmpty, Toast.LENGTH_SHORT).show()
-            }
+            toDoListViewModel.saveNote()
         }
 
         binding.recyclerView.isLongClickable = true

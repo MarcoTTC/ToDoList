@@ -6,6 +6,8 @@ import com.bitchoice.marco.todolist.view.ToDoListApplication
 
 class ViewModelWithApplicationFactory(private val application: ToDoListApplication): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor().newInstance(application)
+        return modelClass
+                .getConstructor(ToDoListApplication::class.java)
+                .newInstance(application)
     }
 }

@@ -8,7 +8,7 @@ interface ToDoTaskDao {
     fun getAll(): List<ToDoTask>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg tasks: ToDoTask)
+    suspend fun insertAll(vararg tasks: ToDoTask)
 
     @Delete
     fun delete(task: ToDoTask)
@@ -17,5 +17,5 @@ interface ToDoTaskDao {
     fun clear()
 
     @Query("SELECT uid FROM ToDoTask WHERE note = :givenNote")
-    fun getUidFromNote(givenNote: String): Int
+    suspend fun getUidFromNote(givenNote: String): Int
 }

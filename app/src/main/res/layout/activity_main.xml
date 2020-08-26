@@ -23,6 +23,7 @@
             android:layout_toStartOf="@id/add_btn"
             android:ems="10"
             android:inputType="textPersonName"
+            android:text="@={ViewModel.noteInput}"
             app:layout_constraintEnd_toStartOf="@id/add_btn"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,4 +57,5 @@
             app:layout_constraintTop_toBottomOf="@id/add_input" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
