@@ -11,12 +11,12 @@ class ToDoListAdapter(private val application: ToDoListApplication): RecyclerVie
     private var toDoList: MutableList<ToDoTask>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoTaskViewHolder {
-        return ToDoTaskViewHolder.inflate(parent, application)
+        return ToDoTaskViewHolder.inflate(parent, application, this)
     }
 
     override fun onBindViewHolder(holder: ToDoTaskViewHolder, position: Int) {
         val task = toDoList!![position]
-        holder.bind(task, this)
+        holder.bind(task)
     }
 
     override fun getItemCount(): Int {

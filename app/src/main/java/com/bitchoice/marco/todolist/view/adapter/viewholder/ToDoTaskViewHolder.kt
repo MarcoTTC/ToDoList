@@ -12,9 +12,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding, private val application: ToDoListApplication) : RecyclerView.ViewHolder(binding.root) {
+class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding,
+                         private val application: ToDoListApplication,
+                         private val listAccess: ListAccess<ToDoTask>) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(task: ToDoTask, listAccess: ListAccess<ToDoTask>) {
+    fun bind(task: ToDoTask) {
         val taskTitle = String.format(binding.root.resources.getString(R.string.note), task.uid)
 
         binding.taskTitle.text = taskTitle
@@ -32,9 +34,9 @@ class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding, private
     }
 
     companion object {
-        fun inflate(parent: ViewGroup, application: ToDoListApplication): ToDoTaskViewHolder {
+        fun inflate(parent: ViewGroup, application: ToDoListApplication, listAccess: ListAccess<ToDoTask>): ToDoTaskViewHolder {
             val binding = ToDoTaskViewHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ToDoTaskViewHolder(binding, application)
+            return ToDoTaskViewHolder(binding, application, listAccess)
         }
     }
 }
