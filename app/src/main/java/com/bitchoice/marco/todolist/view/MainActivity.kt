@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bitchoice.marco.todolist.R
@@ -15,6 +14,7 @@ import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
 import com.bitchoice.marco.todolist.viewmodel.ToDoListViewModel
 import com.bitchoice.marco.todolist.viewmodel.factory.ViewModelWithApplicationFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by Marco Tulio Todeschini Coelho on 12/03/17
@@ -60,8 +60,7 @@ class MainActivity : AppCompatActivity() {
             if (task != null) {
                 toDoTaskListAdapter.addToList(task)
 
-                val messageSaved = getString(R.string.note_saved)
-                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.note_saved, Snackbar.LENGTH_SHORT).show()
 
                 binding.addInput.setText("")
             }
@@ -69,8 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         toDoListViewModel.failedToSaveNote.observe(this, { success ->
             if (success) {
-                val messageSaved = getString(R.string.note_empty)
-                Toast.makeText(this@MainActivity, messageSaved, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.note_empty, Snackbar.LENGTH_SHORT).show()
             }
         })
 
@@ -126,7 +124,7 @@ class MainActivity : AppCompatActivity() {
             if (visitPortfolio.resolveActivity(packageManager) != null) {
                 startActivity(visitPortfolio)
             } else {
-                Toast.makeText(this@MainActivity, R.string.no_browser_available, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.no_browser_available, Snackbar.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }
@@ -146,7 +144,7 @@ class MainActivity : AppCompatActivity() {
             if (visitCredits.resolveActivity(packageManager) != null) {
                 startActivity(visitCredits)
             } else {
-                Toast.makeText(this@MainActivity, R.string.no_browser_available, Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.no_browser_available, Snackbar.LENGTH_SHORT).show()
             }
             dialog.dismiss()
         }
