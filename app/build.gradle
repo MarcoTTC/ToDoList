@@ -47,6 +47,10 @@ dependencies {
     kapt "androidx.room:room-compiler:${versions.room}"
     implementation "androidx.room:room-ktx:${versions.room}"
 
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle_viewmodel}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle_livedata}"
+
     testImplementation 'junit:junit:4.12'
 }
 repositories {

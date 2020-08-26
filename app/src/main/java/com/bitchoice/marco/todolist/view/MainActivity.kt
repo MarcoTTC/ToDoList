@@ -8,10 +8,13 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
 import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
+import com.bitchoice.marco.todolist.viewmodel.ToDoListViewModel
+import com.bitchoice.marco.todolist.viewmodel.factory.ViewModelWithApplicationFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
@@ -25,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var application: ToDoListApplication
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var toDoListViewModel: ToDoListViewModel
 
     private lateinit var eraseDialog: MaterialAlertDialogBuilder
     private lateinit var aboutDialog: MaterialAlertDialogBuilder
@@ -40,6 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
+        toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
 
         toDoTaskListAdapter = ToDoListAdapter(application)
         toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
