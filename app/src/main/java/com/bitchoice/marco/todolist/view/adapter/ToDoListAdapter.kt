@@ -35,14 +35,15 @@ class ToDoListAdapter(private val application: ToDoListApplication): RecyclerVie
     override fun addToList(newTask: ToDoTask) {
         if (toDoList != null) {
             toDoList!!.add(0, newTask)
-            notifyDataSetChanged()
+            notifyItemInserted(0)
         }
     }
 
     override fun removeFromList(task: ToDoTask) {
         if (toDoList != null) {
+            val position = toDoList!!.indexOf(task)
             toDoList!!.remove(task)
-            notifyDataSetChanged()
+            notifyItemRemoved(position)
         }
     }
 
@@ -51,9 +52,5 @@ class ToDoListAdapter(private val application: ToDoListApplication): RecyclerVie
             toDoList!!.clear()
             notifyDataSetChanged()
         }
-    }
-
-    companion object {
-        val NAME: String = ToDoListAdapter::class.simpleName!!
     }
 }
