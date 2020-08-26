@@ -10,20 +10,6 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ListAcce
 
     private var dao: ToDoTaskDao = application.database.getToDoTaskDao()
 
-    fun recoverAllNotes() {
-        object : AsyncTask<Unit, Unit, List<ToDoTask>>() {
-            override fun doInBackground(vararg params: Unit?): List<ToDoTask> {
-                return dao.getAll()
-            }
-
-            override fun onPostExecute(result: List<ToDoTask>) {
-                super.onPostExecute(result)
-
-                listAccess.setList(result)
-            }
-        }.execute()
-    }
-
     fun delete(task: ToDoTask) {
         object : AsyncTask<Unit, Unit, ToDoTask>() {
             override fun doInBackground(vararg params: Unit?): ToDoTask {
@@ -37,23 +23,5 @@ class ToDoTaskManager(application: ToDoListApplication, val listAccess: ListAcce
                 listAccess.removeFromList(result)
             }
         }.execute()
-    }
-
-    fun clear() {
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                dao.clear()
-            }
-
-            override fun onPostExecute(result: Unit?) {
-                super.onPostExecute(result)
-
-                listAccess.clearList()
-            }
-        }.execute()
-    }
-
-    companion object {
-        const val NAME = "ToDoTaskManager"
     }
 }

@@ -48,6 +48,17 @@ class MainActivity : AppCompatActivity() {
         val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
         toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
 
+        toDoTaskListAdapter = ToDoListAdapter(application)
+        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
+
+        binding.recyclerView.adapter = toDoTaskListAdapter
+
+        toDoListViewModel.updateWithList.observe(this, { list ->
+            if (list != null) {
+                toDoTaskListAdapter.setList(list)
+            }
+        })
+
         toDoListViewModel.noteToAdd.observe(this, { task ->
             if (task != null) {
                 toDoTaskListAdapter.addToList(task)
@@ -66,14 +77,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        toDoListViewModel.clearList.observe(this, { execute ->
+            if (execute) {
+                toDoTaskListAdapter.clearList()
+            }
+        })
+
         binding.viewModel = toDoListViewModel
 
-        toDoTaskListAdapter = ToDoListAdapter(application)
-        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
-
-        binding.recyclerView.adapter = toDoTaskListAdapter
-
-        toDoTaskManager.recoverAllNotes()
+        toDoListViewModel.recoverAllNotes()
 
         binding.addBtn.setOnClickListener {
             toDoListViewModel.saveNote()
@@ -85,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         eraseDialog.setCancelable(true)
         eraseDialog.setMessage(R.string.erase_confirm)
         eraseDialog.setPositiveButton(R.string.button_erase) { dialog, _ ->
-            toDoTaskManager.clear()
+            toDoListViewModel.clearList()
             dialog.dismiss()
         }
 

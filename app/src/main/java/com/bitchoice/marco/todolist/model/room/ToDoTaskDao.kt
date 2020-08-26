@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface ToDoTaskDao {
     @Query("SELECT * FROM ToDoTask ORDER BY uid DESC")
-    fun getAll(): List<ToDoTask>
+    suspend fun getAll(): List<ToDoTask>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(vararg tasks: ToDoTask)
@@ -14,7 +14,7 @@ interface ToDoTaskDao {
     fun delete(task: ToDoTask)
 
     @Query("DELETE FROM ToDoTask")
-    fun clear()
+    suspend fun clear()
 
     @Query("SELECT uid FROM ToDoTask WHERE note = :givenNote")
     suspend fun getUidFromNote(givenNote: String): Int
