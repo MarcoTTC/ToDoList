@@ -48,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
         toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
 
+        binding.viewModel = toDoListViewModel
+
         toDoTaskListAdapter = ToDoListAdapter(application)
         toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
 
