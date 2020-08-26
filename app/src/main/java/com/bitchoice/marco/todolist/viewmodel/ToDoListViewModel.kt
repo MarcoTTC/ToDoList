@@ -9,7 +9,7 @@ import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
 import com.bitchoice.marco.todolist.view.ToDoListApplication
 import kotlinx.coroutines.launch
 
-class ToDoListViewModel(private val application: ToDoListApplication) : ViewModel() {
+class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
 
     val noteInput: MutableLiveData<String?> = MutableLiveData()
 
