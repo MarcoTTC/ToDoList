@@ -3,9 +3,8 @@ package com.bitchoice.marco.todolist.view.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.presenter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
-import com.bitchoice.marco.todolist.view.viewholder.ToDoTaskViewHolder
+import com.bitchoice.marco.todolist.view.adapter.viewholder.ToDoTaskViewHolder
 
 class ToDoListAdapter(private val application: ToDoListApplication): RecyclerView.Adapter<ToDoTaskViewHolder>(), ListAccess<ToDoTask> {
 

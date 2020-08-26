@@ -1,4 +1,4 @@
-package com.bitchoice.marco.todolist.view.viewholder
+package com.bitchoice.marco.todolist.view.adapter.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ToDoTaskViewHolderBinding
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.presenter.ListAccess
+import com.bitchoice.marco.todolist.view.adapter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

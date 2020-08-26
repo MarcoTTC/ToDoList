@@ -1,4 +1,4 @@
-package com.bitchoice.marco.todolist.presenter
+package com.bitchoice.marco.todolist.view.adapter
 
 interface ListAccess<T> {
     fun setList(toDoTaskList: List<T>)
