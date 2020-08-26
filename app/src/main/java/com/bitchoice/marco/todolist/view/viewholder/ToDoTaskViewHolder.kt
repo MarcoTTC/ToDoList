@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ToDoTaskViewHolderBinding
-import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.presenter.ListAccess
 import com.bitchoice.marco.todolist.view.ToDoListApplication
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding, private val application: ToDoListApplication) : RecyclerView.ViewHolder(binding.root) {
 
@@ -18,9 +20,13 @@ class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding, private
         binding.taskTitle.text = taskTitle
         binding.taskNote.text = task.note
 
-        val manager = ToDoTaskManager(application, listAccess)
+        val dao = application.database.getToDoTaskDao()
         binding.root.setOnLongClickListener {
-            manager.delete(task)
+            CoroutineScope(Dispatchers.Main).launch {
+                dao.delete(task)
+
+                listAccess.removeFromList(task)
+            }
             true
         }
     }

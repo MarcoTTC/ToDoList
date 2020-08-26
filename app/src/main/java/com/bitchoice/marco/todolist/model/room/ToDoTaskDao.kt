@@ -11,7 +11,7 @@ interface ToDoTaskDao {
     suspend fun insertAll(vararg tasks: ToDoTask)
 
     @Delete
-    fun delete(task: ToDoTask)
+    suspend fun delete(task: ToDoTask)
 
     @Query("DELETE FROM ToDoTask")
     suspend fun clear()

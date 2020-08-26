@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
-import com.bitchoice.marco.todolist.model.ToDoTaskManager
 import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
 import com.bitchoice.marco.todolist.viewmodel.ToDoListViewModel
 import com.bitchoice.marco.todolist.viewmodel.factory.ViewModelWithApplicationFactory
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var creditsDialog: MaterialAlertDialogBuilder
 
     private lateinit var toDoTaskListAdapter: ToDoListAdapter
-    private lateinit var toDoTaskManager: ToDoTaskManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +47,6 @@ class MainActivity : AppCompatActivity() {
         toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
 
         toDoTaskListAdapter = ToDoListAdapter(application)
-        toDoTaskManager = ToDoTaskManager(application, toDoTaskListAdapter)
 
         binding.recyclerView.adapter = toDoTaskListAdapter
 
