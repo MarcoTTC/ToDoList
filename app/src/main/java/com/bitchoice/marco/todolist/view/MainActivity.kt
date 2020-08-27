@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
                 Snackbar.make(binding.coordinatorLayout, R.string.note_saved, Snackbar.LENGTH_SHORT).show()
 
-                binding.addInput.setText("")
+                binding.addTextInputEditText.setText("")
             }
         })
 

@@ -8,4 +8,6 @@
   <color name="secondaryDarkColor">#bf5f82</color>
   <color name="primaryTextColor">#004d40</color>
   <color name="secondaryTextColor">#311b92</color>
+
+  <color name="surfaceColor">#C2E8D0BB</color>
 </resources>
