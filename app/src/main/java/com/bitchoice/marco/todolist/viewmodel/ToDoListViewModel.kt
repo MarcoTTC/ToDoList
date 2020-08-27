@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
  */
 class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
 
-    val noteInput: MutableLiveData<String?> = MutableLiveData()
+    val noteEditText: MutableLiveData<String?> = MutableLiveData()
 
     private val _updateWithList: MutableLiveData<List<ToDoTask>?> = MutableLiveData()
     val updateWithList: LiveData<List<ToDoTask>?>
@@ -59,7 +59,7 @@ class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
             _noteToAdd.value = null
             _failedToSaveNote.value = false
 
-            val value = noteInput.value
+            val value = noteEditText.value
             if (value?.isNotEmpty() == true) {
                 viewModelScope.launch {
                     val newToDoTask = ToDoTask(0, value)
