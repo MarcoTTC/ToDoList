@@ -11,7 +11,8 @@ import com.bitchoice.marco.todolist.view.ToDoListApplication
  * Visit my portfolio for more info at http://monolitonegro.wixsite.com/portfolio
  */
 class ViewModelWithApplicationFactory(private val application: ToDoListApplication): ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return modelClass
                 .getConstructor(ToDoListApplication::class.java)
                 .newInstance(application)

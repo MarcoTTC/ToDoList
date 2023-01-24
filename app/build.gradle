@@ -12,6 +12,12 @@ android {
         versionCode versions.versionCode
         versionName "${versions.versionName}"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildFeatures {
@@ -29,11 +35,12 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    // AndroidX
+    // AndroidX AppCompat
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
 
     // Material Design Library
@@ -41,7 +48,6 @@ dependencies {
 
     // Kotlin
     implementation "androidx.core:core-ktx:${versions.ktx_core}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin_version}"
 
     // Room
     implementation "androidx.room:room-runtime:${versions.room}"
@@ -49,11 +55,12 @@ dependencies {
     implementation "androidx.room:room-ktx:${versions.room}"
 
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle_viewmodel}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle_livedata}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${versions.lifecycle}"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 }
+
 repositories {
     mavenCentral()
 }
