@@ -39,23 +39,23 @@ class ToDoListAdapter(private val application: ToDoListApplication): RecyclerVie
     }
 
     override fun addToList(newTask: ToDoTask) {
-        if (toDoList != null) {
-            toDoList!!.add(0, newTask)
+        toDoList?.let {
+            it.add(0, newTask)
             notifyItemInserted(0)
         }
     }
 
     override fun removeFromList(task: ToDoTask) {
-        if (toDoList != null) {
-            val position = toDoList!!.indexOf(task)
-            toDoList!!.remove(task)
+        toDoList?.let {
+            val position = it.indexOf(task)
+            it.remove(task)
             notifyItemRemoved(position)
         }
     }
 
     override fun clearList() {
-        if (toDoList != null) {
-            toDoList!!.clear()
+        toDoList?.let {
+            it.clear()
             notifyDataSetChanged()
         }
     }

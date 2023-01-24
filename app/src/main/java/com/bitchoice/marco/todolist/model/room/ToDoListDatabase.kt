@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase
  * and it's available at http://github.com/MarcoTTC/ToDoList
  * Visit my portfolio for more info at http://monolitonegro.wixsite.com/portfolio
  */
-@Database(entities = arrayOf(ToDoTask::class), version = 1)
+@Database(entities = [ToDoTask::class], version = 1)
 abstract class ToDoListDatabase : RoomDatabase() {
     abstract fun getToDoTaskDao(): ToDoTaskDao
 }

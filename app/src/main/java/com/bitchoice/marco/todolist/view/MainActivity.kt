@@ -44,39 +44,41 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
-        toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory).get(ToDoListViewModel::class.java)
+        toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory)[ToDoListViewModel::class.java]
 
         toDoTaskListAdapter = ToDoListAdapter(application)
 
         binding.recyclerView.adapter = toDoTaskListAdapter
 
-        toDoListViewModel.updateWithList.observe(this, { list ->
-            if (list != null) {
-                toDoTaskListAdapter.setList(list)
+        toDoListViewModel.updateWithList.observe(this) { list ->
+            list?.let {
+                toDoTaskListAdapter.setList(it)
             }
-        })
+        }
 
-        toDoListViewModel.noteToAdd.observe(this, { task ->
-            if (task != null) {
+        toDoListViewModel.noteToAdd.observe(this) { task ->
+            task?.let {
                 toDoTaskListAdapter.addToList(task)
 
-                Snackbar.make(binding.coordinatorLayout, R.string.note_saved, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.note_saved, Snackbar.LENGTH_SHORT)
+                    .show()
 
                 binding.addTextInputEditText.setText("")
             }
-        })
+        }
 
-        toDoListViewModel.failedToSaveNote.observe(this, { success ->
+        toDoListViewModel.failedToSaveNote.observe(this) { success ->
             if (success) {
-                Snackbar.make(binding.coordinatorLayout, R.string.note_empty, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(binding.coordinatorLayout, R.string.note_empty, Snackbar.LENGTH_SHORT)
+                    .show()
             }
-        })
+        }
 
-        toDoListViewModel.clearList.observe(this, { execute ->
+        toDoListViewModel.clearList.observe(this) { execute ->
             if (execute) {
                 toDoTaskListAdapter.clearList()
             }
-        })
+        }
 
         binding.viewModel = toDoListViewModel
 
