@@ -2,7 +2,7 @@ package com.bitchoice.marco.todolist.view.adapter
 
 /**
  * Created by Marco Tulio Todeschini Coelho on 26/08/20
- * This android app source code is licenced under GNU GPLv3
+ * This android app source code is licenced under MIT License
  * and it's available at http://github.com/MarcoTTC/ToDoList
  */
 interface ListAccess<T> {

@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 
 /**
  * Created by Marco Tulio Todeschini Coelho on 12/03/17
- * This android app source code is licenced under GNU GPLv3
+ * This android app source code is licenced under MIT License
  * and it's available at http://github.com/MarcoTTC/ToDoList
  */
 class MainActivity : AppCompatActivity() {
