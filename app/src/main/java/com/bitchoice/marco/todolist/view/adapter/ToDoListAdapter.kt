@@ -3,7 +3,6 @@ package com.bitchoice.marco.todolist.view.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.model.room.ToDoTask
-import com.bitchoice.marco.todolist.view.ToDoListApplication
 import com.bitchoice.marco.todolist.view.adapter.viewholder.ToDoTaskViewHolder
 
 /**
@@ -11,12 +10,12 @@ import com.bitchoice.marco.todolist.view.adapter.viewholder.ToDoTaskViewHolder
  * This android app source code is licenced under GNU GPLv3
  * and it's available at http://github.com/MarcoTTC/ToDoList
  */
-class ToDoListAdapter(private val application: ToDoListApplication): RecyclerView.Adapter<ToDoTaskViewHolder>(), ListAccess<ToDoTask> {
+class ToDoListAdapter: RecyclerView.Adapter<ToDoTaskViewHolder>(), ListAccess<ToDoTask> {
 
     private var toDoList: MutableList<ToDoTask>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoTaskViewHolder {
-        return ToDoTaskViewHolder.inflate(parent, application, this)
+        return ToDoTaskViewHolder.inflate(parent, this)
     }
 
     override fun onBindViewHolder(holder: ToDoTaskViewHolder, position: Int) {

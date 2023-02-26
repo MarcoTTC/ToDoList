@@ -6,13 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ActivityMainBinding
 import com.bitchoice.marco.todolist.view.adapter.ToDoListAdapter
 import com.bitchoice.marco.todolist.viewmodel.ToDoListViewModel
-import com.bitchoice.marco.todolist.viewmodel.factory.ViewModelWithApplicationFactory
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -23,29 +22,22 @@ import com.google.android.material.snackbar.Snackbar
  */
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var application: ToDoListApplication
-
     private lateinit var binding: ActivityMainBinding
-    private lateinit var toDoListViewModel: ToDoListViewModel
-
     private lateinit var eraseDialog: MaterialAlertDialogBuilder
+
     private lateinit var aboutDialog: MaterialAlertDialogBuilder
     private lateinit var creditsDialog: MaterialAlertDialogBuilder
-
     private lateinit var toDoTaskListAdapter: ToDoListAdapter
+
+    private val toDoListViewModel: ToDoListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        application = getApplication() as ToDoListApplication
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewModelWithApplicationFactory = ViewModelWithApplicationFactory(application)
-        toDoListViewModel = ViewModelProvider(this, viewModelWithApplicationFactory)[ToDoListViewModel::class.java]
-
-        toDoTaskListAdapter = ToDoListAdapter(application)
+        toDoTaskListAdapter = ToDoListAdapter()
 
         binding.recyclerView.adapter = toDoTaskListAdapter
 
@@ -153,11 +145,6 @@ class MainActivity : AppCompatActivity() {
             dialog.cancel()
         }
         creditsDialog.create()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        application.database.close()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -1,12 +1,11 @@
 package com.bitchoice.marco.todolist.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import com.bitchoice.marco.todolist.model.room.RoomDatabaseInstance
+import com.bitchoice.marco.todolist.model.room.ToDoListDatabase
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.model.room.ToDoTaskDao
-import com.bitchoice.marco.todolist.view.ToDoListApplication
 import kotlinx.coroutines.launch
 
 /**
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
  * This android app source code is licenced under GNU GPLv3
  * and it's available at http://github.com/MarcoTTC/ToDoList
  */
-class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
+class ToDoListViewModel(application: Application) : AndroidViewModel(application) {
 
     val noteEditText: MutableLiveData<String?> = MutableLiveData()
 
@@ -36,7 +35,8 @@ class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
 
     private var isSavingNote: Boolean = false
 
-    private var dao: ToDoTaskDao = application.database.getToDoTaskDao()
+    private val database: ToDoListDatabase = RoomDatabaseInstance.getInstance(application.applicationContext)
+    private val dao: ToDoTaskDao = database.getToDoTaskDao()
 
     init {
         _updateWithList.value = null
@@ -85,5 +85,11 @@ class ToDoListViewModel(application: ToDoListApplication) : ViewModel() {
 
             _clearList.value = true
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        database.close()
     }
 }

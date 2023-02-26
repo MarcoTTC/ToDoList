@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bitchoice.marco.todolist.R
 import com.bitchoice.marco.todolist.databinding.ToDoTaskViewHolderBinding
+import com.bitchoice.marco.todolist.model.room.RoomDatabaseInstance
 import com.bitchoice.marco.todolist.model.room.ToDoTask
 import com.bitchoice.marco.todolist.view.adapter.ListAccess
-import com.bitchoice.marco.todolist.view.ToDoListApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
  * and it's available at http://github.com/MarcoTTC/ToDoList
  */
 class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding,
-                         private val application: ToDoListApplication,
                          private val listAccess: ListAccess<ToDoTask>) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(task: ToDoTask) {
@@ -27,7 +26,7 @@ class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding,
         binding.taskTitle.text = taskTitle
         binding.taskNote.text = task.note
 
-        val dao = application.database.getToDoTaskDao()
+        val dao = RoomDatabaseInstance.getInstance(binding.root.context).getToDoTaskDao()
         binding.root.setOnLongClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 dao.delete(task)
@@ -39,9 +38,9 @@ class ToDoTaskViewHolder(private val binding: ToDoTaskViewHolderBinding,
     }
 
     companion object {
-        fun inflate(parent: ViewGroup, application: ToDoListApplication, listAccess: ListAccess<ToDoTask>): ToDoTaskViewHolder {
+        fun inflate(parent: ViewGroup, listAccess: ListAccess<ToDoTask>): ToDoTaskViewHolder {
             val binding = ToDoTaskViewHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            return ToDoTaskViewHolder(binding, application, listAccess)
+            return ToDoTaskViewHolder(binding, listAccess)
         }
     }
 }

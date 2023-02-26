@@ -40,7 +40,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    // AndroidX AppCompat
+    // AndroidX
+    implementation "androidx.activity:activity-ktx:${versions.appcompat}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
 
     // Material Design Library
