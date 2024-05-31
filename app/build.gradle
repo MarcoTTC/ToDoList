@@ -54,7 +54,7 @@ dependencies {
     })
 
     // AndroidX
-    implementation "androidx.activity:activity-ktx:${versions.appcompat}"
+    implementation "androidx.activity:activity-ktx:${versions.activity}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
 
     // Material Design Library
