@@ -11,6 +11,9 @@
 /captures
 /webimages
 
+# Kotlin 2.0 Files
+.kotlin/
+
 #keystores
 /key
 *.jks
@@ -20,13 +23,7 @@
 *.ap_
 
 #IntelliJ idea folder files
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/datasources.ids
-.idea/datasources.xml
-.idea/gradle.xml
-.idea/libraries
-.idea/caches
+.idea/
 
 #Dalvik VM files
 *.dex
